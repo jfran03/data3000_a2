@@ -1,6 +1,5 @@
 package data3000_a2;
 
-import Java.Emplopyee;
 import java.util.*;
 
 public class BinarySearch {
@@ -10,7 +9,7 @@ public class BinarySearch {
 
         for (Employee employee : employees) {
             if (employee.name.equals(name)) {
-                return employee.id; // id == index
+                return employees.indexOf(employee); //LOL
             }
         }
 

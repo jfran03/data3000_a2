@@ -6,13 +6,16 @@ import javax.swing.*;
 
 public class EmployeeProgram {
 
-    public static ArrayList<Employee> employeeSortArrayOne = new ArrayList<>();
-    public static ArrayList<Employee> employeeSortArrayTwo = new ArrayList<>();
+    public static ArrayAndTime selectionName;
+    public static ArrayAndTime quickName;
+    public static ArrayAndTime selectionSalary;
+    public static ArrayAndTime quickSalary;
 
     private static final Scanner SCANNER = new Scanner(System.in);
-    public static String filePath;
+    public static String filePath = "None";
+    public static String findPerson = "None";
 
-    // builds and sorts array based on FilePath, will return sorted array AND sorting time
+    // first im seeing this i cant lie, my goal was for tuple returns
     public record ArrayAndTime(ArrayList<Employee> sortedArray, long sortingTime) {}
 
     public static void main(String[] args) {
@@ -22,15 +25,28 @@ public class EmployeeProgram {
                 "Employee Data Sorting and Searching Program!\n\nPress OK to Start",
                 "Welcome to", JOptionPane.INFORMATION_MESSAGE);
 
-        System.out.print("Enter the full path of employee data file <> ");
-        filePath = SCANNER.nextLine();
+        while (filePath.equals("None")) {
+            System.out.print("Enter the full path of employee data file <> ");
+            filePath = SCANNER.nextLine();
+
+            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+
+                selectionName = buildSortedArray(br, "selection");
+                quickName = buildSortedArray(br, "quick");
+
+                selectionSalary = buildSortedArray(br, "selection");
+                quickSalary = buildSortedArray(br, "quick");
+
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found: " + filePath);
+                filePath = "None"; // this is probably not a good way to do this lol
+            } catch (IOException e) {
+                System.out.println("Error reading file: " + e.getMessage());
+                filePath = "None"; // this is probably not a good way to do this lol
+            }
+        }
+
         System.out.println("Read employee data from file " + filePath);
-
-        ArrayAndTime selectionName = buildSortedArray(filePath, "selection");
-        ArrayAndTime quickName = buildSortedArray(filePath, "quick");
-
-        ArrayAndTime selectionSalary = buildSortedArray(filePath, "selection");
-        ArrayAndTime quickSalary = buildSortedArray(filePath, "quick");
 
         System.out.println("\nThe performance of our sorting algorithms");
         System.out.println("###########################################");
@@ -43,15 +59,23 @@ public class EmployeeProgram {
 
         System.out.println("Write employee data sorted by their names into file <>...");
         writeEmployeesToFile(selectionName.sortedArray(), "out/sortedemployeeByName.csv");
+
+        System.out.print("Enter the name of the employee to search <> ");
+        findPerson = SCANNER.nextLine();
+
+        System.out.print("Employee found at index <> " + new BinarySearch().search(selectionName.sortedArray(), findPerson));
     }
 
+    // builds and sorts array based on FilePath, will return sorted array AND sorting time
     // DRY compliant cuz im lazy!
-    public static ArrayAndTime buildSortedArray(String filePath, String sortMethod) {
-        long startTime=0; // will start LITERALLY as soon as sorting starts, should cut out non-causal delays
-        long endTime=0;
+    public static ArrayAndTime buildSortedArray(BufferedReader br, String sortMethod) {
+        long startTime = 0; // will start LITERALLY as soon as sorting starts, should cut out non-causal delays
+        long endTime = 0;
         ArrayList<Employee> employees = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        // yea, try-catch is redundant, but its ok!
+        try (br) {
+
             String line;
             while ((line = br.readLine()) != null) {
                 String[] p = line.split(",");

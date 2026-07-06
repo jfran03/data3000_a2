@@ -6,7 +6,7 @@ import java.util.*;
 public class SelectionSort {
     public static long sort(ArrayList<Employee> list) {
         long start = System.currentTimeMillis();
-        list.sort(Comparator.comparingInt(e -> e.id));
+        list.sort(Comparator.comparing(n -> n.name));
         return System.currentTimeMillis() - start;
     }
 }

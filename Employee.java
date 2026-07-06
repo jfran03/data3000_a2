@@ -22,4 +22,9 @@ public class Employee {
     public float calcHourlySalary(){
         return this.hoursWorked * this.hourlyRate;
     }
+
+    @Override
+    public String toString() {
+        return this.id + "," + this.name + "," + this.hoursWorked + "," + this.hourlyRate + "," + this.deductionProvince + "," + this.deductionFederal + "," + this.educationAllownace;
+    }
 }

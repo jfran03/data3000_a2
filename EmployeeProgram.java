@@ -15,9 +15,24 @@ public class EmployeeProgram {
     public static String filePath = "None";
     public static String findPerson = "None";
 
-    // first im seeing this i cant lie, my goal was for tuple returns
-    public record ArrayAndTime(ArrayList<Employee> sortedArray, long sortingTime) {}
+    // plain class instead of record
+    public static class ArrayAndTime {
+        private final ArrayList<Employee> sortedArray;
+        private final long sortingTime;
 
+        public ArrayAndTime(ArrayList<Employee> sortedArray, long sortingTime) {
+            this.sortedArray = sortedArray;
+            this.sortingTime = sortingTime;
+        }
+
+        public ArrayList<Employee> sortedArray() {
+            return sortedArray;
+        }
+
+        public long sortingTime() {
+            return sortingTime;
+        }
+    }
     public static void main(String[] args) {
 
         // welcome panel
@@ -29,17 +44,12 @@ public class EmployeeProgram {
             System.out.print("Enter the full path of employee data file <> ");
             filePath = SCANNER.nextLine();
 
-            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            try {
+                    selectionName = buildSortedArray(new BufferedReader(new FileReader(filePath)), "selection");
+                    quickName = buildSortedArray(new BufferedReader(new FileReader(filePath)), "quick");
+                    selectionSalary = buildSortedArray(new BufferedReader(new FileReader(filePath)), "selection");
+                    quickSalary = buildSortedArray(new BufferedReader(new FileReader(filePath)), "quick");
 
-                selectionName = buildSortedArray(br, "selection");
-                quickName = buildSortedArray(br, "quick");
-
-                selectionSalary = buildSortedArray(br, "selection");
-                quickSalary = buildSortedArray(br, "quick");
-
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found: " + filePath);
-                filePath = "None"; // this is probably not a good way to do this lol
             } catch (IOException e) {
                 System.out.println("Error reading file: " + e.getMessage());
                 filePath = "None"; // this is probably not a good way to do this lol
@@ -74,7 +84,7 @@ public class EmployeeProgram {
         ArrayList<Employee> employees = new ArrayList<>();
 
         // yea, try-catch is redundant, but its ok!
-        try (br) {
+        try (BufferedReader reader = br) {
 
             String line;
             while ((line = br.readLine()) != null) {

@@ -1,6 +1,6 @@
 package data3000_a2;
 
-public class Employee {
+public class Employee implements Comparable<Employee> {
     public int id;
     public String name;
     public int hoursWorked;
@@ -26,5 +26,10 @@ public class Employee {
     @Override
     public String toString() {
         return this.id + "," + this.name + "," + this.hoursWorked + "," + this.hourlyRate + "," + this.deductionProvince + "," + this.deductionFederal + "," + this.educationAllownace;
+    }
+
+    @Override
+    public int compareTo(Employee other) {
+        return this.name.compareTo(other.name);
     }
 }

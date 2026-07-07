@@ -2,11 +2,34 @@ package data3000_a2;
 
 import java.util.*;
 
-// naive implementation, change when specific algo is implemented
 public class QuickSort {
-    public static long sort(ArrayList<Employee> list) {
+
+    // Generic quicksort - T must implement Comparable
+    public static <T extends Comparable<T>> long sort(ArrayList<T> list) {
         long start = System.currentTimeMillis();
-        list.sort(Comparator.comparing(n -> n.name));
+        quickSort(array, 0, array.length - 1);
         return System.currentTimeMillis() - start;
+    }
+
+    private static <T extends Comparable<T>> void quickSort(ArrayList<T> list, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(array, low, high);
+            quickSort(array, low, pivotIndex - 1);
+            quickSort(array, pivotIndex + 1, high);
+        }
+    }
+
+    private static <T extends Comparable<T>> int partition(ArrayList<T> list, int low, int high) {
+        T pivot = list.get(high);
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (list.get(j).compareTo(pivot) < 0) {
+                i++;
+                Collections.swap(list, i, j);
+            }
+        }
+        Collections.swap(list, i + 1, high);
+        return i + 1;
     }
 }

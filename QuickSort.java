@@ -7,15 +7,15 @@ public class QuickSort {
     // Generic quicksort - T must implement Comparable
     public static <T extends Comparable<T>> long sort(ArrayList<T> list) {
         long start = System.currentTimeMillis();
-        quickSort(array, 0, array.length - 1);
+        quickSort(list, 0, list.size() - 1);
         return System.currentTimeMillis() - start;
     }
 
     private static <T extends Comparable<T>> void quickSort(ArrayList<T> list, int low, int high) {
         if (low < high) {
-            int pivotIndex = partition(array, low, high);
-            quickSort(array, low, pivotIndex - 1);
-            quickSort(array, pivotIndex + 1, high);
+            int pivotIndex = partition(list, low, high);
+            quickSort(list, low, pivotIndex - 1);
+            quickSort(list, pivotIndex + 1, high);
         }
     }
 

@@ -75,18 +75,13 @@ public class EmployeeProgram {
         writeEmployeesToFile(selectionSalary.sortedArray(), "out/sortedemployeeBySalary.csv");
 
         System.out.println("Write employee data sorted by their names into file <>...");
-        writeEmployeesToFile(quickName.sortedArray(), "out/sortedemployeeByName.csv");
-
+        writeEmployeesToFile(selectionName.sortedArray(), "out/sortedemployeeByName.csv");
 
         System.out.print("Enter the name of the employee to search <> ");
         findPerson = SCANNER.nextLine();
 
-        //changed to sort by name
-        int index = BinarySearch.search(
-            quickName.sortedArray().toArray(new Employee[0]),
-            new Employee(0, findPerson, 0, 0f, 0f, 0f, 0f));
-        System.out.println(index != -1 ? "Employee found at index " + index : "Employee not found.");    
-}
+        System.out.print("Employee found at index <> " + new BinarySearch().search(selectionName.sortedArray(), findPerson));
+    }
 
     // builds and sorts array based on FilePath, will return sorted array AND sorting time
     // DRY compliant cuz im lazy!
@@ -113,11 +108,18 @@ public class EmployeeProgram {
                 ));
             }
 
+            //converts list → array → sort → list.
             if (sortMethod.equals("selection")) {
+                Employee[] arr = employees.toArray(new Employee[0]);
                 startTime = System.currentTimeMillis();
-                SelectionSort.sort(employees);
+                SelectionSort.sort(arr, arr.length);
                 endTime = System.currentTimeMillis();
-            } else if (sortMethod.equals("quick")) {
+                employees.clear();
+                for (Employee e : arr) {
+                    employees.add(e);
+                }
+            }
+            else if (sortMethod.equals("quick")) {
                 startTime = System.currentTimeMillis();
                 QuickSort.sort(employees);
                 endTime = System.currentTimeMillis();

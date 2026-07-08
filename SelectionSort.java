@@ -1,37 +1,36 @@
 package data3000_a2;
 
-import java.util.*;
-
 public class SelectionSort {
-    public static long sort(ArrayList<Employee> list) {
-        long start = System.currentTimeMillis();
 
-        //This will get the number of elements within the list.
-        int e = list.size();
-        //This gets the smallest elements from the list.
-        for (int i = 0; i < e - 1; i++) {
-        	//This gets an index from the list.
-        	int min_idx = i;
-        	//This for loop will iterate through all elements of the data.
-        	for (int j = i + 1; j < e; j++) {
-        		//This gets the data.
-        		float salaryJ = list.get(j).calcHourlySalary();
-                float salaryMin = list.get(min_idx).calcHourlySalary();
-                //This sorts the data from smallest to biggest.
-                if (salaryJ < salaryMin) {
-                	min_idx = j;
+    // Generic selection sort on an array of Comparable objects    
+    public static <T extends Comparable<T>> void sort(T[] array, int count) {
+        // Get the number of elements to sort
+        for (int i = 0; i < count - 1; i++) {
+             // Start with the current index as the smallest
+            int minIdx = i;
+            // Loop through the rest of the array to find a smaller salary
+            for (int j = i + 1; j < count; j++) {
+                // Compare hourly salaries of the two employees
+                if (compareSalary(array[j], array[minIdx]) < 0) {
+                    minIdx = j;
                 }
-        	}
-        	//This moves the elements to their correct position within the sorted array.
-        	Employee temp = list.get(i);
-            list.set(i, list.get(min_idx));
-            list.set(min_idx, temp);
-        }                
-        
-        return System.currentTimeMillis() - start;
+            }
+            // Move the smallest element to its correct position
+            T temp = array[i];
+            array[i] = array[minIdx];
+            array[minIdx] = temp;
+        }
+    }
+     // Compare objects by hourly salary (assignment requirement for Employee)
+    private static <T extends Comparable<T>> int compareSalary(T a, T b) {
+        if (a instanceof Employee && b instanceof Employee) {
+            Employee ea = (Employee) a;
+            Employee eb = (Employee) b;
+            return Float.compare(ea.calcHourlySalary(), eb.calcHourlySalary());
+        }
+        return a.compareTo(b);
     }
 }
-
 //These resources were used to create this algorithm and understand the individual components.
 //https://www.geeksforgeeks.org/dsa/selection-sort-algorithm-2/
 //https://www.geeksforgeeks.org/java/list-size-method-in-java-with-examples/
